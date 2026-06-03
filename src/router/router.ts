@@ -1,0 +1,37 @@
+import { lazy } from "react"
+
+export const Home = lazy(() => import("../pages/Home/Home"))
+export const Jobs = lazy(() => import("../pages/Jobs/Jobs"))
+export const Candidates = lazy(() => import("../pages/Candidates/Candidates"))
+export const Companies = lazy(() => import("../pages/Companies/Companies"))
+export const Login = lazy(() => import("../pages/Login/Login"))
+export const Register = lazy(() => import("../pages/Register/Register"))
+export const ForgotPassword = lazy(() => import("../pages/ForgotPassword/ForgotPassword"))
+export const ResetPassword = lazy(() => import("../pages/ResetPassword/ResetPassword"))
+export const CandidateFeed = lazy(() => import("../pages/candidate/CandidateFeed/CandidateFeed"))
+
+
+
+export const JobsCandidate = lazy(() => import("../pages/candidate/JobsCandidate/JobsCandidate"))
+export const NetworkCandidate = lazy(() => import("../pages/candidate/NetworkCandidate/NetworkCandidate"))
+export const MessagesCandidate = lazy(() => import("../pages/candidate/MessagesCandidate/MessagesCandidate"))
+export const ProfileCandidate = lazy(() => import("../pages/candidate/ProfileCandidate/ProfileCandidate"))
+export const NotificationsCandidate = lazy(() => import("../pages/candidate/NotificationsCandidate/NotificationsCandidate"))
+export const AICandidate = lazy(() => import("../pages/candidate/AICandidate/AICandidate"))
+// export const AppliedJobs = lazy(() => import("../pages/candidate/AppliedJobs/AppliedJobs"))
+// export const JobAlerts = lazy(() => import("../pages/candidate/JobAlerts/JobAlerts"))
+// export const SkillsHub = lazy(() => import("../pages/candidate/SkillsHub/SkillsHub"))
+// export const Assessment = lazy(() => import("../pages/candidate/Assessment/Assessment"))
+// export const Settings = lazy(() => import("../pages/candidate/Settings/Settings"))
+// export const Notifications = lazy(() => import("../pages/candidate/Notifications/Notifications"))
+
+
+// export const CompanyDashboard = lazy(() => import("../pages/company/CompanyDashboard/CompanyDashboard"))
+// export const CompanyJobs = lazy(() => import("../pages/company/CompanyJobs/CompanyJobs"))
+// export const CompanyProfile = lazy(() => import("../pages/company/CompanyProfile/CompanyProfile"))
+// export const CompanyFeed = lazy(() => import("../pages/company/CompanyFeed/CompanyFeed"))
+// export const CompanyNetwork = lazy(() => import("../pages/company/CompanyNetwork/CompanyNetwork"))
+// export const CompanyMessages = lazy(() => import("../pages/company/CompanyMessages/CompanyMessages"))
+// export const CompanySettings = lazy(() => import("../pages/company/CompanySettings/CompanySettings"))
+// export const CompanyNotifications = lazy(() => import("../pages/company/CompanyNotifications/CompanyNotifications"))
+// export const CompanyApplications = lazy(() => import("../pages/company/CompanyApplications/CompanyApplications"))

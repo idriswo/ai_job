@@ -1,0 +1,88 @@
+<USER_REQUEST>
+e brat man vaqtr ki rangi candidate register yo login mekunam 
+
+boyad page candidate barad in kodi page candidate hast inro ba tsx gardon dar injo header va footer ivaz mewavand
+man bo typescript kor mekunam kodimara jazir nakuni bo 
+
+
+[01.06.2026 19:37] saidaliev: <!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AIJob | Candidate Feed</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .ai-shimmer {
+            background: linear-gradient(90deg, rgba(124, 58, 237, 0) 0%, rgba(124, 58, 237, 0.1) 50%, rgba(124, 58, 237, 0) 100%);
+            background-size: 200% 100%;
+            animation: shimmer 3s infinite linear;
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-container": "#0a66c2",
+                        "on-primary-container": "#dbe6ff",
+                        "on-background": "#111c2d",
+                        "secondary-fixed": "#eaddff",
+                        "inverse-on-surface": "#ecf1ff",
+                        "surface-container-high": "#dee8ff",
+               
+<truncated 25325 bytes>
+              this.classList.remove('text-primary');
+                        this.classList.add('text-on-surface-variant');
+                    } else {
+                        icon.style.fontVariationSettings = "'FILL' 1";
+                        this.classList.add('text-primary');
+                        this.classList.remove('text-on-surface-variant');
+                        
+                        // Small scale animation
+                        this.style.transform = 'scale(1.1)';
+                        setTimeout(() => this.style.transform = 'scale(1)', 150);
+                    }
+                });
+            }
+        });
+[01.06.2026 19:37] saidaliev: // Hover lift for cards
+        document.querySelectorAll('article, .bg-surface-container-lowest').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-2px)';
+                card.style.transition = 'transform 0.2s ease, box-shadow 0.2s ease';
+                card.style.boxShadow = '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+                card.style.boxShadow = '';
+            });
+        });
+    </script>
+</body></html>
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-06-02T05:19:07+05:00.
+
+The user's current state is as follows:
+Active Document: c:\Users\USER\Desktop\ai_job\ai_job\src\pages\CandidateFeed\CandidateFeed.tsx (LANGUAGE_TSX)
+Cursor is on line: 24
+Other open documents:
+- c:\Users\USER\Desktop\ai_job\ai_job\src\pages\CandidateFeed\CandidateFeed.tsx (LANGUAGE_TSX)
+- c:\Users\USER\Desktop\ai_job\ai_job\process.cjs (LANGUAGE_JAVASCRIPT)
+- c:\Users\USER\Desktop\ai_job\ai_job\convert.js (LANGUAGE_JAVASCRIPT)
+No browser pages are currently open.
+Running terminal commands:
+- npm run dev (in c:\Users\USER\Desktop\ai_job\ai_job, running for 10h51m18s)
+</ADDITIONAL_METADATA>
