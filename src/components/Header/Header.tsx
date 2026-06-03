@@ -1,4 +1,4 @@
-import { Search, Home, Briefcase, Users, MessageSquare, Bell, Plus, Sparkles, Building2, PenTool, MonitorPlay, X, ArrowRight, User, Settings, LogOut, ChevronDown } from 'lucide-react'
+import { Search, Home, Briefcase, Users, MessageSquare, Bell, Plus, Sparkles, Building2, X, ArrowRight, User, Settings, LogOut, ChevronDown } from 'lucide-react'
 import { memo, useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { NavLink, useNavigate } from 'react-router-dom'
@@ -62,7 +62,7 @@ const Header = memo(() => {
   }, [currentUserId]);
 
   useEffect(() => {
-    let intervalId: NodeJS.Timeout;
+    let intervalId: number;
     const fetchCounts = async () => {
       if (!currentUserId) return;
       try {
@@ -381,7 +381,7 @@ const Header = memo(() => {
 
           <div className="flex items-center gap-[16px]">
             <NavLink 
-              to={userRole === 'Candidate' ? '/notifications-candidate' : '#'}
+              to="/notifications-company"
               className={({isActive}) => `relative transition-colors ${isActive ? 'text-[#00288e]' : 'text-[#444653] hover:text-[#00288e]'}`}
             >
               <Bell className="w-[24px] h-[24px]" />

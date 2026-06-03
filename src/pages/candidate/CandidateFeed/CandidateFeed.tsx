@@ -1,4 +1,4 @@
-import { Bookmark, BrainCircuit, Calendar, Image as ImageIcon, Info, MessageSquare, MoreHorizontal, Plus, Send, Share2, Sparkles, ThumbsUp, Users, X } from 'lucide-react';
+import { Bookmark, BrainCircuit, Calendar, Image as ImageIcon, Info, MessageSquare, MoreHorizontal, Plus, Send, Share2, Sparkles, ThumbsUp, X } from 'lucide-react';
 import { memo, useEffect, useState, useRef } from 'react';
 import { toast } from 'sonner';
 import { Avatar, AvatarFallback, AvatarImage } from '../../../components/ui/avatar';
@@ -15,16 +15,68 @@ const getFullImageUrl = (url: string) => {
   return `${baseUrl}${url.startsWith('/') ? '' : '/'}${url}`;
 };
 
+interface Skill {
+  id: number | string;
+  name: string;
+}
+
+interface Language {
+  id: number | string;
+  name: string;
+}
+
+interface UserInfo {
+  id: number;
+  fullName: string;
+  email: string;
+  avatarUrl?: string;
+  profilePicture?: string;
+  headline?: string;
+}
+
+interface UserProfile {
+  id: number;
+  headline?: string;
+  bio?: string;
+  location?: string;
+  website?: string;
+  bannerUrl?: string;
+  avatarUrl?: string;
+}
+
+interface PostComment {
+  id: number | string;
+  content: string;
+  authorName?: string;
+  authorImageUrl?: string;
+  createdAt: string;
+}
+
+interface Post {
+  id: number;
+  content: string;
+  authorName?: string;
+  authorImageUrl?: string;
+  createdAt?: string;
+  likeCount?: number;
+  commentCount?: number;
+  repostCount?: number;
+  likedByMe?: boolean;
+  userId?: number;
+  user?: { id: number };
+  imageUrl?: string;
+}
+
 const CandidateFeed = memo(() => {
-  const [posts, setPosts] = useState<any[]>([]);
+  const [posts, setPosts] = useState<Post[]>([]);
   const [newPostContent, setNewPostContent] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isPosting, setIsPosting] = useState(false);
   const [activeCommentPostId, setActiveCommentPostId] = useState<number | null>(null);
   const [commentText, setCommentText] = useState('');
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
-  const [currentUserInfo, setCurrentUserInfo] = useState<any>(null);
-  const [currentUserProfile, setCurrentUserProfile] = useState<any>(null);
+  const [currentUserInfo, setCurrentUserInfo] = useState<UserInfo | null>(null);
+  const [currentUserProfile, setCurrentUserProfile] = useState<UserProfile | null>(null);
   const [postToDelete, setPostToDelete] = useState<number | null>(null);
   const [feedType, setFeedType] = useState<'feed' | 'all'>('all');
   const [postImageUrl, setPostImageUrl] = useState<string>('');
@@ -33,13 +85,13 @@ const CandidateFeed = memo(() => {
   const [editingPostId, setEditingPostId] = useState<number | null>(null);
   const [editPostContent, setEditPostContent] = useState('');
   const [isSavingEdit, setIsSavingEdit] = useState(false);
-  const [commentsByPost, setCommentsByPost] = useState<Record<number, any[]>>({});
+  const [commentsByPost, setCommentsByPost] = useState<Record<number, PostComment[]>>({});
   
-  const [skills, setSkills] = useState<any[]>([]);
+  const [skills, setSkills] = useState<Skill[]>([]);
   const [isAddingSkill, setIsAddingSkill] = useState(false);
   const [newSkillName, setNewSkillName] = useState('');
 
-  const [languages, setLanguages] = useState<any[]>([]);
+  const [languages, setLanguages] = useState<Language[]>([]);
   const [isAddingLanguage, setIsAddingLanguage] = useState(false);
   const [newLanguageName, setNewLanguageName] = useState('');
   
@@ -322,7 +374,7 @@ const CandidateFeed = memo(() => {
           </AnimatePresence>
 
           <div className="flex flex-wrap gap-[6px]">
-            {skills.map((skill: any) => (
+            {skills.map((skill: Skill) => (
               <span key={skill.id} className="text-[12px] px-[10px] py-[4px] bg-slate-100 text-slate-600 rounded-lg font-medium border border-slate-200/60 flex items-center gap-[4px]">
                 {skill.name}
               </span>
@@ -365,7 +417,7 @@ const CandidateFeed = memo(() => {
           </AnimatePresence>
 
           <div className="flex flex-wrap gap-[6px]">
-            {languages.map((lang: any) => (
+            {languages.map((lang: Language) => (
               <span key={lang.id} className="text-[12px] px-[10px] py-[4px] bg-slate-100 text-slate-600 rounded-lg font-medium border border-slate-200/60 flex items-center gap-[4px]">
                 {lang.name}
               </span>
@@ -600,10 +652,9 @@ const CandidateFeed = memo(() => {
                 </div>
 
                 {activeCommentPostId === post.id && (
-                  <div className="mt-[16px] bg-slate-100 p-[16px] rounded-2xl border-[1px] border-slate-200">
-
-                    <div className="space-y-[12px] mb-[16px] max-h-[300px] overflow-y-auto pr-[8px]">
-                      {commentsByPost[post.id]?.map((comment: any) => (
+                  <div className="mt-[20px] pt-[20px] border-t border-slate-100">
+                    <div className="space-y-[16px] mb-[16px] max-h-[300px] overflow-y-auto pr-[8px]">
+                      {commentsByPost[post.id]?.map((comment: PostComment) => (
                         <div key={comment.id} className="flex gap-[12px]">
                           <Avatar className="w-[32px] h-[32px]">
                             <AvatarImage src={comment.authorImageUrl ? getFullImageUrl(comment.authorImageUrl) : `https://ui-avatars.com/api/?name=${comment.authorName || 'U'}&background=random`} />
