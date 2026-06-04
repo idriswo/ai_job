@@ -325,7 +325,7 @@ const MessagesCandidate = memo(() => {
                     <p className="text-[13px] text-[#10b981] font-medium">В сети</p>
                   ) : (
                     <p className="text-[13px] text-[#6b7280]">
-                      был(а) недавно`.padStart(2, '0')}:{`${(selectedUser.id * 7) % 60}`.padStart(2, '0')}
+                      был(а) недавно
                     </p>
                   )}
                 </div>
