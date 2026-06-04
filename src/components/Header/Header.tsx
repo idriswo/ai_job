@@ -6,6 +6,7 @@ import { Button } from '../../components/ui/button'
 import { Input } from '../../components/ui/input'
 import { Avatar, AvatarFallback, AvatarImage } from '../../components/ui/avatar'
 import { logoutUser, axiosRequest } from '../../utils/token'
+import { ModeToggle } from '../../components/mode-toggle'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -253,6 +254,7 @@ const Header = memo(() => {
           </nav>
 
           <div className="flex items-center h-[100%] gap-[16px]">
+            <ModeToggle />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <div className="flex flex-col items-center justify-center gap-[2px] cursor-pointer text-[12px] text-slate-500 hover:text-indigo-600 transition-colors min-w-[70px] group outline-none">
@@ -377,9 +379,14 @@ const Header = memo(() => {
               <MessageSquare className="w-[24px] h-[24px]" />
               <span>Messages</span>
             </NavLink>
+            <NavLink to="/ai-company" className="text-[14px] leading-[20px] font-[600] text-[#444653] hover:text-[#00288e] transition-colors flex flex-col items-center justify-center gap-[4px] h-[100%] px-[8px]" >
+              <Sparkles className="w-[24px] h-[24px]" />
+              <span>AI HR</span>
+            </NavLink>
           </nav>
 
           <div className="flex items-center gap-[16px]">
+            <ModeToggle />
             <NavLink 
               to="/notifications-company"
               className={({isActive}) => `relative transition-colors ${isActive ? 'text-[#00288e]' : 'text-[#444653] hover:text-[#00288e]'}`}
@@ -395,8 +402,8 @@ const Header = memo(() => {
                 </Avatar>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-[160px] bg-[#ffffff] border-[#c4c5d5]">
-                <DropdownMenuItem className="cursor-pointer text-[#0b1c30] hover:bg-[#f8f9ff] hover:text-[#00288e]">
-                  Company Profile
+                <DropdownMenuItem asChild className="cursor-pointer text-[#0b1c30] hover:bg-[#f8f9ff] hover:text-[#00288e]">
+                  <NavLink to="/company-profile">Company Profile</NavLink>
                 </DropdownMenuItem>
                 <DropdownMenuItem 
                   className="cursor-pointer text-[#ff4d4d] hover:bg-[#fff0f0] hover:text-[#e60000]"
@@ -431,6 +438,10 @@ const Header = memo(() => {
           <NavLink to="/company-messages" className="text-[#666666] flex flex-col items-center gap-[4px]">
             <MessageSquare className="w-[24px] h-[24px]" />
             <span className="text-[10px] font-[600]">Messages</span>
+          </NavLink>
+          <NavLink to="/ai-company" className="text-[#666666] flex flex-col items-center gap-[4px]">
+            <Sparkles className="w-[24px] h-[24px]" />
+            <span className="text-[10px] font-[600]">AI HR</span>
           </NavLink>
         </nav>
       </>

@@ -4,6 +4,9 @@ import { Input } from '../../components/ui/input'
 import { Button } from '../../components/ui/button'
 import { Card } from '../../components/ui/card'
 import Section1home from './Section1home/Section1home'
+import FeaturedCompanies from './FeaturedCompanies/FeaturedCompanies'
+import FeaturedCandidates from './FeaturedCandidates/FeaturedCandidates'
+import PlatformExplanation from './PlatformExplanation/PlatformExplanation'
 
 const Home = memo(() => {
   return (
@@ -37,6 +40,9 @@ const Home = memo(() => {
         </Card>
       </div>
       <Section1home />
+      <FeaturedCompanies />
+      <FeaturedCandidates />
+      <PlatformExplanation />
     </>
   )
 })

@@ -1,7 +1,8 @@
 import { memo } from 'react'
 import Layout from './Layout/Layout'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import { Home,Jobs, Login, Register, CandidateFeed, ForgotPassword, ResetPassword, JobsCandidate, NetworkCandidate, MessagesCandidate, Candidates, Companies, ProfileCandidate, NotificationsCandidate, AICandidate } from './router/router';
+import { Home,Jobs, Login, Register, CandidateFeed, ForgotPassword, ResetPassword, JobsCandidate, NetworkCandidate, MessagesCandidate, Candidates, Companies, ProfileCandidate, NotificationsCandidate, AICandidate, OrganizationFeed, OrganizationJobs, AIOrganization, OrganizationProfile, OrganizationNetwork, OrganizationMessages, OrganizationNotifications, NotFound } from './router/router';
+import { ProtectedRoute } from './components/ProtectedRoute';
 
 const App = memo(() => {
   const router = createBrowserRouter([
@@ -25,36 +26,76 @@ const App = memo(() => {
           path: "/companies",
           element: <Companies />,
         },
-
         {
-          path: "/candidate",
-          element: <CandidateFeed />,
+          element: <ProtectedRoute />, // Protect all candidate routes
+          children: [
+            {
+              path: "/candidate",
+              element: <CandidateFeed />,
+            },
+            {
+              path: "/jobs-candidate",
+              element: <JobsCandidate />,
+            },
+            {
+              path: "/network-candidate",
+              element: <NetworkCandidate />,
+            },
+            {
+              path: "/messages-candidate",
+              element: <MessagesCandidate />,
+            },
+            {
+              path: "/profile-candidate",
+              element: <ProfileCandidate />,
+            },
+            {
+              path: "/notifications-candidate",
+              element: <NotificationsCandidate />,
+            },
+            {
+              path: "/ai-candidate",
+              element: <AICandidate />,
+            },
+          ]
         },
         {
-          path: "/jobs-candidate",
-          element: <JobsCandidate />,
+          element: <ProtectedRoute />, // Protect all organization routes
+          children: [
+            {
+              path: "/company-feed",
+              element: <OrganizationFeed />,
+            },
+            {
+              path: "/company-jobs",
+              element: <OrganizationJobs />,
+            },
+            {
+              path: "/ai-company",
+              element: <AIOrganization />,
+            },
+            {
+              path: "/company-profile",
+              element: <OrganizationProfile />,
+            },
+            {
+              path: "/company-network",
+              element: <OrganizationNetwork />,
+            },
+            {
+              path: "/company-messages",
+              element: <OrganizationMessages />,
+            },
+            {
+              path: "/notifications-company",
+              element: <OrganizationNotifications />,
+            },
+          ]
         },
         {
-          path: "/network-candidate",
-          element: <NetworkCandidate />,
-        },
-        {
-          path: "/messages-candidate",
-          element: <MessagesCandidate />,
-        },
-        {
-          path: "/profile-candidate",
-          element: <ProfileCandidate />,
-        },
-        {
-          path: "/notifications-candidate",
-          element: <NotificationsCandidate />,
-        },
-        {
-          path: "/ai-candidate",
-          element: <AICandidate />,
-        },
-        
+          path: "*",
+          element: <NotFound />
+        }
       ],
     },
     {
