@@ -7,8 +7,6 @@ import axios from 'axios';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// Junior dev note: This interface defines what a message looks like in our chat.
-// It helps TypeScript catch errors if we forget a property.
 interface Message {
   id: string;
   role: 'user' | 'assistant';
@@ -16,7 +14,6 @@ interface Message {
 }
 
 const AICandidate = memo(() => {
-  // State to hold our chat messages
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
@@ -25,29 +22,22 @@ const AICandidate = memo(() => {
     }
   ]);
   
-  // State for the user's current input
   const [input, setInput] = useState('');
   
-  // State to show a loading spinner when AI is thinking
   const [isLoading, setIsLoading] = useState(false);
   
-  // Reference to the bottom of the chat to automatically scroll down
   const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  // Automatically scroll to bottom whenever messages array changes
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  // Function to handle sending a message
   const handleSend = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if (!input.trim() || isLoading) return;
 
     const userText = input.trim();
-    setInput(''); // Clear input immediately for better UX
+    setInput(''); 
 
-    // 1. Add the user's message to the chat
     const newUserMsg: Message = {
       id: Date.now().toString(),
       role: 'user',
@@ -57,57 +47,51 @@ const AICandidate = memo(() => {
     setIsLoading(true);
 
     try {
-      // 2. Read the Gemini API Key from our secure .env file
-      // NOTE: In Vite, environment variables must start with VITE_ to be exposed to the client
-      const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
-      
-      let aiResponseText = '';
-
-      if (GEMINI_API_KEY) {
-        // 3a. If we have the API key, call Gemini directly
-        const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+        const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
         
-        // Prepare the chat history context for Gemini (optional but makes it smarter)
-        // For simplicity, we just send the current prompt wrapped in the required format
-        const systemPrompt = "Илтимос ба ҳамаи саволҳо ва дархостҳо танҳо бо забони Тоҷикӣ (Tajik) ҷавоб деҳ. ";
-        const response = await axios.post(geminiUrl, {
-          contents: [{
-            parts: [{ text: systemPrompt + userText }]
-          }]
-        });
+        let aiResponseText = '';
+  
+        if (GEMINI_API_KEY) {
+          const { GoogleGenerativeAI } = await import('@google/generative-ai');
+          const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+          const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash" });
+          
+          const systemPrompt = "Шумо як ёвари HR ҳастед ва бо забони тоҷикӣ гап мезанед. ";
+          const result = await model.generateContent(systemPrompt + userText);
+          const response = await result.response;
+          
+          aiResponseText = response.text() || 'I could not generate a response.';
+        } else {
+          const response = await axiosRequest.post('/api/Ai/ask', {
+            prompt: userText
+          });
+          aiResponseText = response.data?.answer || response.data?.data || response.data || 'I am sorry, I could not process that.';
+        }
         
-        aiResponseText = response.data?.candidates?.[0]?.content?.parts?.[0]?.text || 'I could not generate a response.';
-      } else {
-        // 3b. Fallback to our backend API if the key is missing
-        const response = await axiosRequest.post('/api/Ai/ask', {
-          prompt: userText
-        });
-        aiResponseText = response.data?.answer || response.data?.data || response.data || 'I am sorry, I could not process that.';
-      }
-      
-      const newAiMsg: Message = {
+        const newAiMsg: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
         content: aiResponseText
       };
       
       setMessages(prev => [...prev, newAiMsg]);
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('AI Request Error:', error);
-      toast.error('Failed to get a response from AI. Please try again.');
+      const err = error as { response?: { data?: { message?: string, error?: string } }, message?: string };
+      const rawMsg = err.response?.data?.message || err.response?.data?.error || err.message || "Unknown error";
+      const errMsg = typeof rawMsg === 'object' ? JSON.stringify(rawMsg) : rawMsg;
+      toast.error(`AI Error: ${errMsg}`);
       
-      // If error, add a system message so the user knows
       setMessages(prev => [...prev, {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
         content: 'Sorry, I encountered an error connecting to my servers.'
       }]);
     } finally {
-      setIsLoading(false); // Stop loading indicator
+      setIsLoading(false); 
     }
   };
 
-  // Helper function for quick actions
   const handleQuickAction = (prompt: string) => {
     setInput(prompt);
   };

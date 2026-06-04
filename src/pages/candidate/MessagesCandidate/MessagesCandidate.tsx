@@ -1,3 +1,4 @@
+import type { UserInfo, Connection, Conversation, Message } from '../../../types';
 import { memo, useEffect, useState, useRef } from 'react';
 import { Search, Send, MapPin, Image as ImageIcon, Paperclip, MoreHorizontal, Smile, Check, CheckCheck, Edit2, Trash2 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '../../../components/ui/avatar';
@@ -8,15 +9,15 @@ import EmojiPicker from 'emoji-picker-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const MessagesCandidate = memo(() => {
-  const [connections, setConnections] = useState<any[]>([]);
-  const [selectedUser, setSelectedUser] = useState<any>(null);
+  const [connections, setConnections] = useState<Connection[]>([]);
+  const [selectedUser, setSelectedUser] = useState<UserInfo | null>(null);
   const [conversationId, setConversationId] = useState<number | null>(null);
-  const [messages, setMessages] = useState<any[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
   const [loadingChat, setLoadingChat] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const [conversations, setConversations] = useState<any[]>([]);
+  const [conversations, setConversations] = useState<Conversation[]>([]);
   const [isTyping, setIsTyping] = useState(false);
   
   const [editingMessageId, setEditingMessageId] = useState<number | null>(null);
@@ -46,7 +47,7 @@ const MessagesCandidate = memo(() => {
           axiosRequest.get('/api/Connection/my'),
           axiosRequest.get('/api/Conversation')
         ]);
-        const accepted = connRes.data.filter((c: any) => c.status === 'Accepted');
+        const accepted = connRes.data.filter((c: Connection) => c.status === 'Accepted');
         setConnections(accepted);
         setConversations(convRes.data || []);
       } catch (error) {
@@ -171,7 +172,7 @@ const MessagesCandidate = memo(() => {
     return () => clearInterval(interval);
   }, [selectedUser, conversations]);
 
-  const handleSelectUser = async (user: any) => {
+  const handleSelectUser = async (user: UserInfo) => {
     setSelectedUser(user);
     setLoadingChat(true);
     try {
@@ -212,7 +213,7 @@ const MessagesCandidate = memo(() => {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
-  const checkIsOnline = (user: any) => {
+  const checkIsOnline = (user: UserInfo) => {
     if (!user) return false;
     const conv = conversations.find(c => c.user1Id === user.id || c.user2Id === user.id);
     if (conv?.lastMessageAt) {
@@ -324,7 +325,7 @@ const MessagesCandidate = memo(() => {
                     <p className="text-[13px] text-[#10b981] font-medium">В сети</p>
                   ) : (
                     <p className="text-[13px] text-[#6b7280]">
-                      был(а) сегодня в {`${(selectedUser.id % 12) + 8}`.padStart(2, '0')}:{`${(selectedUser.id * 7) % 60}`.padStart(2, '0')}
+                      был(а) недавно`.padStart(2, '0')}:{`${(selectedUser.id * 7) % 60}`.padStart(2, '0')}
                     </p>
                   )}
                 </div>

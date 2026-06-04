@@ -48,7 +48,7 @@ const Login = memo(() => {
         } else {
           toast.error("Login successful, but no token received.");
         }
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error("Login Error:", error);
         const errorMsg = error.response?.data?.message || error.response?.data?.error || "Invalid email or password";
         toast.error(errorMsg);

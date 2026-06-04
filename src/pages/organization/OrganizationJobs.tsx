@@ -31,7 +31,7 @@ const OrganizationJobs = memo(() => {
   const handleCreateJob = async () => {
     if (!newJob.title || !newJob.description) return toast.error('Title and description are required');
     try {
-      let orgId = 1; // Default fallback
+      let orgId = 1;
       try {
         const orgRes = await axiosRequest.get('/api/Organization/mine');
         const orgs = Array.isArray(orgRes.data) ? orgRes.data : [orgRes.data];
@@ -57,7 +57,7 @@ const OrganizationJobs = memo(() => {
       setIsCreateModalOpen(false);
       setNewJob({ title: '', description: '', location: '', type: 'Full-time', salary: '' });
       toast.success('Job posted successfully!');
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
       toast.error(error.response?.data?.message || 'Failed to post job');
     }

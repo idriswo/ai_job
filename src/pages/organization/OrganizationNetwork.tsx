@@ -1,3 +1,4 @@
+import type { UserInfo, Connection } from '../../types';
 import { memo, useState, useEffect } from 'react'
 import { Search, Users, UserPlus, Bookmark, Clock, BarChart2 } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '../../components/ui/avatar'
@@ -14,11 +15,11 @@ const SUGGESTIONS = [
 
 const OrganizationNetwork = memo(() => {
   const [activeTab, setActiveTab] = useState<'all' | 'network' | 'pending'>('all')
-  const [data, setData] = useState<any[]>([])
+  const [data, setData] = useState<UserInfo[]>([])
   const [loading, setLoading] = useState(false)
-  const [currentUser, setCurrentUser] = useState<any>(null)
+  const [currentUser, setCurrentUser] = useState<UserInfo | null>(null)
   const [sentRequests, setSentRequests] = useState<Record<number, boolean>>({})
-  const [connectionsMap, setConnectionsMap] = useState<Record<number, any>>({})
+  const [connectionsMap, setConnectionsMap] = useState<Record<number, Connection>>({})
   const [searchQuery, setSearchQuery] = useState('')
 
   const fetchCurrentUser = async () => {
@@ -46,8 +47,8 @@ const OrganizationNetwork = memo(() => {
           axiosRequest.get('/api/Connection/all')
         ]);
         
-        const map: Record<number, any> = {};
-        connRes.data.forEach((c: any) => {
+        const map: Record<number, Connection> = {};
+        connRes.data.forEach((c: Connection) => {
           if (c.otherUser && c.otherUser.id) {
             map[c.otherUser.id] = c;
           }
@@ -55,13 +56,13 @@ const OrganizationNetwork = memo(() => {
         setConnectionsMap(map);
         
         // Exclude current user from directory if present
-        setData(dirRes.data.filter((u: any) => u.id !== user?.id));
+        setData(dirRes.data.filter((u: UserInfo) => u.id !== user?.id));
       } else if (activeTab === 'network') {
         const res = await axiosRequest.get('/api/Connection/my');
         setData(res?.data || []);
       } else if (activeTab === 'pending') {
         const res = await axiosRequest.get('/api/Connection/all');
-        const pending = (res?.data || []).filter((c: any) => c.status === 'Pending');
+        const pending = (res?.data || []).filter((c: Connection) => c.status === 'Pending');
         setData(pending);
       }
     } catch (error) {
@@ -107,7 +108,7 @@ const OrganizationNetwork = memo(() => {
     }
   }
 
-  const getUserFromItem = (item: any) => {
+  const getUserFromItem = (item: Connection) => {
     if (activeTab === 'all') return item;
     if (item.requester && item.requester.id !== currentUser?.id) return item.requester;
     if (item.addressee && item.addressee.id !== currentUser?.id) return item.addressee;
@@ -180,7 +181,7 @@ const OrganizationNetwork = memo(() => {
             <div className="text-center p-8 text-gray-500">Loading...</div>
           ) : (
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-[24px]">
-              {data.filter((item: any) => {
+              {data.filter((item: UserInfo | Connection) => {
                 if (!searchQuery) return true;
                 const user = getUserFromItem(item);
                 const name = (user?.fullName || user?.name || "").toLowerCase();
@@ -188,7 +189,7 @@ const OrganizationNetwork = memo(() => {
                 const company = (user?.profile?.company || "").toLowerCase();
                 const query = searchQuery.toLowerCase();
                 return name.includes(query) || role.includes(query) || company.includes(query);
-              }).map((item: any) => {
+              }).map((item: UserInfo | Connection) => {
                 const user = getUserFromItem(item);
                 const name = user?.fullName || user?.name || "Professional";
                 const role = user?.profile?.headline || user?.headline || user?.role || "Member";

@@ -1,3 +1,4 @@
+import type { Skill } from '../../../types';
 import { memo, useEffect, useState } from 'react';
 import { Briefcase, Star, UserPlus } from 'lucide-react';
 import { Card } from '../../../components/ui/card';
@@ -73,7 +74,7 @@ const FeaturedCandidates = memo(() => {
               </div>
               
               <div className="flex flex-wrap justify-center gap-[6px] mb-[24px]">
-                {candidate.skills?.slice(0, 3).map((skill: any, idx: number) => (
+                {candidate.skills?.slice(0, 3).map((skill: Skill, idx: number) => (
                   <span key={idx} className="bg-slate-100 text-slate-600 text-[11px] px-[8px] py-[4px] rounded-md font-medium">
                     {skill.name || skill}
                   </span>

@@ -1,3 +1,4 @@
+import type { OrganizationProfile } from '../../types';
 import { memo, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Card } from '../../components/ui/card';
@@ -12,7 +13,7 @@ const OrganizationFeed = memo(() => {
     profileViews: 892
   });
 
-  const [orgProfile, setOrgProfile] = useState<any>(null);
+  const [orgProfile, setOrgProfile] = useState<OrganizationProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

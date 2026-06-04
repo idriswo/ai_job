@@ -58,7 +58,7 @@ const OrganizationProfile = memo(() => {
         setProfileId(res.data?.id);
         toast.success('Company profile created!');
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast.error(error.response?.data?.message || 'Failed to save profile');
     } finally {
       setIsSaving(false);

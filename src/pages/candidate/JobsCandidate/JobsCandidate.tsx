@@ -1,3 +1,4 @@
+import type { Job } from '../../../types';
 import { memo, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -12,7 +13,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '../../../components/ui/avat
 
 const JobsCandidate = memo(() => {
   const [searchParams] = useSearchParams();
-  const [jobs, setJobs] = useState<any[]>([]);
+  const [jobs, setJobs] = useState<Job[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
   const [savedJobs, setSavedJobs] = useState<number[]>([]);

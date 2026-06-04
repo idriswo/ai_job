@@ -18,9 +18,9 @@ import { axiosRequest } from '../../../utils/token';
 import { toast } from 'sonner';
 
 const ProfileCandidate = memo(() => {
-  const [user, setUser] = useState<any>(null);
-  const [profile, setProfile] = useState<any>(null);
-  const [skills, setSkills] = useState<any[]>([]);
+  const [user, setUser] = useState<UserInfo | null>(null);
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [skills, setSkills] = useState<Skill[]>([]);
   const [loading, setLoading] = useState(true);
 
   const [editProfileOpen, setEditProfileOpen] = useState(false);
@@ -296,7 +296,7 @@ const ProfileCandidate = memo(() => {
                 <p className="text-[14px] text-[#6b7280]">No skills added yet.</p>
               ) : (
                 <div className="flex flex-wrap gap-[8px]">
-                  {skills.map((s: any) => (
+                  {skills.map((s: Skill) => (
                     <div key={s.id} className="group flex items-center bg-slate-100 text-indigo-600 border-[1px] border-[#cce0ff] px-[12px] py-[6px] rounded-full text-[14px] font-medium transition-all hover:border-indigo-600">
                       {s.skill?.name}
                       <button 

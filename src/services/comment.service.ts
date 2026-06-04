@@ -6,7 +6,7 @@ export const commentService = {
     return res.data?.data || res.data || [];
   },
   createComment: async (postId: number, content: string) => {
-    const { data } = await axiosRequest.post(`/api/Post/${postId}/comment`, { content });
+    const { data } = await axiosRequest.post(`/api/Post/${postId}/comments`, { content });
     return data;
   }
 };

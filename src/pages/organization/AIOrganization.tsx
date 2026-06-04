@@ -4,7 +4,6 @@ import { Button } from '../../components/ui/button';
 import { Card } from '../../components/ui/card';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
-import { GoogleGenerativeAI } from "@google/generative-ai";
 
 interface Message {
   id: string;
@@ -41,23 +40,32 @@ const AIOrganization = memo(() => {
     setIsLoading(true);
 
     try {
-      const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-      if (!apiKey) throw new Error("Gemini API key is missing");
+      const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+      let textResponse = '';
 
-      const genAI = new GoogleGenerativeAI(apiKey);
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-      const prompt = `You are an expert HR AI assistant for a corporate platform. The user asks: ${text}. Provide a professional, helpful response. Format it nicely.`;
-      
-      const result = await model.generateContent(prompt);
-      const response = await result.response;
-      const textResponse = response.text();
+      if (!GEMINI_API_KEY) {
+        const { axiosRequest } = await import('../../utils/token');
+        const response = await axiosRequest.post('/api/Ai/ask', { prompt: text });
+        textResponse = response.data?.answer || response.data?.data || response.data || 'I am sorry, I could not process that.';
+      } else {
+        const { GoogleGenerativeAI } = await import('@google/generative-ai');
+        const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+        const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash" });
+        const prompt = `You are an expert HR AI assistant for a corporate platform. The user asks: ${text}. Provide a professional, helpful response. Format it nicely.`;
+        
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        textResponse = response.text() || 'I could not generate a response.';
+      }
 
       const aiMsg: Message = { id: (Date.now() + 1).toString(), role: 'assistant', content: textResponse };
       setMessages(prev => [...prev, aiMsg]);
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("AI Error:", error);
-      toast.error('Failed to get AI response');
+      const err = error as { response?: { data?: { message?: string, error?: string } }, message?: string };
+      const rawMsg = err.response?.data?.message || err.response?.data?.error || err.message || "Unknown error";
+      const errMsg = typeof rawMsg === 'object' ? JSON.stringify(rawMsg) : rawMsg;
+      toast.error(`AI Error: ${errMsg}`);
     } finally {
       setIsLoading(false);
     }

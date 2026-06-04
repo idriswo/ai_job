@@ -18,7 +18,7 @@ const Header = memo(() => {
   const navigate = useNavigate()
   const [userRole, setUserRole] = useState<string | null>(null)
   const [currentUserId, setCurrentUserId] = useState<number | null>(null)
-  const [currentUser, setCurrentUser] = useState<any>(null)
+  const [currentUser, setCurrentUser] = useState<UserInfo | null>(null)
   const [unreadMessages, setUnreadMessages] = useState(0)
   const [pendingRequests, setPendingRequests] = useState(0)
   
@@ -68,11 +68,11 @@ const Header = memo(() => {
       if (!currentUserId) return;
       try {
         const connRes = await axiosRequest.get('/api/Connection/all');
-        const pending = (connRes.data || []).filter((c: any) => c.status === 'Pending' && c.addresseeId === currentUserId).length;
+        const pending = (connRes.data || []).filter((c: Connection) => c.status === 'Pending' && c.addresseeId === currentUserId).length;
         setPendingRequests(pending);
-
+        
         const convRes = await axiosRequest.get('/api/Conversation');
-        const unread = (convRes.data || []).reduce((acc: number, conv: any) => acc + (conv.unreadCount || 0), 0);
+        const unread = (convRes.data || []).reduce((acc: number, conv: Conversation) => acc + (conv.unreadCount || 0), 0);
         setUnreadMessages(unread);
         
         console.log("Notification counts updated:", { pending, unread, currentUserId });
